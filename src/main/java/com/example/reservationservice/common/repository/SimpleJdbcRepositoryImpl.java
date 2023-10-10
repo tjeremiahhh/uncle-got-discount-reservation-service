@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,6 +15,9 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+
+import com.example.reservationservice.common.utility.SqlUtil;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
@@ -109,70 +113,43 @@ public class SimpleJdbcRepositoryImpl implements SimpleJdbcRepository {
         return result;
     }
 
-    // @Override
-    // public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, Class<T> clazz) {
-    //     String countQuery = SqlUtil.deriveCountQuery(sql);
-    //     return queryPage(sql, countQuery, params, pageable, clazz);
-    // }
+    @Override
+    public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, Class<T> clazz) {
+        String countQuery = SqlUtil.deriveCountQuery(sql);
+        return queryPage(sql, countQuery, params, pageable, clazz);
+    }
 
-    // @Override
-    // public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, String defaultOrder, Class<T> clazz) {
-    //     String countQuery = SqlUtil.deriveCountQuery(sql);
-    //     return queryPage(sql, countQuery, params, pageable, defaultOrder, clazz);
-    // }
+    @Override
+    public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, String defaultOrder, Class<T> clazz) {
+        String countQuery = SqlUtil.deriveCountQuery(sql);
+        return queryPage(sql, countQuery, params, pageable, defaultOrder, clazz);
+    }
 
-    // @Override
-    // public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable, Class<T> clazz) {
+    @Override
+    public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable, Class<T> clazz) {
 
-    //     String defaultOrder = " ORDER BY (SELECT NULL) ";
-    //     return queryPage(sql, countQuery, params, pageable, defaultOrder, clazz);
-    // }
+        String defaultOrder = " ORDER BY (SELECT NULL) ";
+        return queryPage(sql, countQuery, params, pageable, defaultOrder, clazz);
+    }
 
-    // @Override
-    // public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable, String defaultOrder, Class<T> clazz) {
-    //     Long count = querySingleObject(countQuery, params, Long.class);
-    //     List<T> result;
+    @Override
+    public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable, String defaultOrder, Class<T> clazz) {
+        Long count = querySingleObject(countQuery, params, Long.class);
+        List<T> result;
 
-    //     if (isGeneralClass(clazz)) {
-    //         result = namedParameterJdbcTemplate.queryForList(sql + SqlUtil.sortBuilder(pageable, defaultOrder), params, clazz);
-    //     } else {
-    //         result = namedParameterJdbcTemplate.query(sql + SqlUtil.sortBuilder(pageable, defaultOrder), params, new BeanPropertyRowMapper<T>(clazz));
-    //     }
+        if (isGeneralClass(clazz)) {
+            result = namedParameterJdbcTemplate.queryForList(sql + SqlUtil.sortBuilder(pageable, defaultOrder), params, clazz);
+        } else {
+            result = namedParameterJdbcTemplate.query(sql + SqlUtil.sortBuilder(pageable, defaultOrder), params, new BeanPropertyRowMapper<T>(clazz));
+        }
 
-    //     if (log.isDebugEnabled()) {
-    //         log.debug("Query returned {} result(s)", CollectionUtils.isEmpty(result) ? 0 : result.size());
-    //     }
-    //     return new PageImpl<>(result, pageable, count);
-    // }
+        if (log.isDebugEnabled()) {
+            log.debug("Query returned {} result(s)", CollectionUtils.isEmpty(result) ? 0 : result.size());
+        }
+        return new PageImpl<>(result, pageable, count);
+    }
 
     private boolean isGeneralClass(Class<?> clazz) {
         return !clazz.getPackage().getName().startsWith("com");
-    }
-
-    @Override
-    public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, Class<T> clazz) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'queryPage'");
-    }
-
-    @Override
-    public <T> Page<T> queryPage(String sql, MapSqlParameterSource params, Pageable pageable, String defaultOrder,
-            Class<T> clazz) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'queryPage'");
-    }
-
-    @Override
-    public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable,
-            Class<T> clazz) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'queryPage'");
-    }
-
-    @Override
-    public <T> Page<T> queryPage(String sql, String countQuery, MapSqlParameterSource params, Pageable pageable,
-            String defaultOrder, Class<T> clazz) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'queryPage'");
     }
 }

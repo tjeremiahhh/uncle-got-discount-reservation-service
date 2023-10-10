@@ -1,9 +1,14 @@
 package com.example.reservationservice.reservation;
 
+import java.time.LocalDateTime;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.reservationservice.entity.Reservation;
+import com.example.reservationservice.reservation.dto.ReservationDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,12 +18,48 @@ import lombok.RequiredArgsConstructor;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
-
-    public void createNewReservation() {
-
-    }
-
     public Reservation getReservation(Integer id) {
         return reservationRepository.findById(id, Reservation.class);
     }
+
+    public void createNewReservation(ReservationDTO reservationDTO) {
+        Reservation reservation = new Reservation();
+
+        // TODO: check business listing vacancy
+
+        // TODO: maybe check if already made reservation today, but maybe can allow more than 1 reservation per day too
+
+        reservation.setBusinessListingDiscountsId(reservationDTO.getBusinessListingDiscountsId());
+        reservation.setDate(reservationDTO.getDate());
+        reservation.setNoOfDiners(reservationDTO.getNoOfDiners());
+        reservation.setSpecialRequests(reservationDTO.getSpecialRequests());
+        reservation.setCreatedDate(LocalDateTime.now());
+        reservation.setUpdatedDate(LocalDateTime.now());
+        reservation.setCreatedBy(-1);
+
+        try {
+            reservationRepository.save(reservation);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred in creating reservation.");
+        }
+    }
+
+    public void editReservation(ReservationDTO reservationDTO) {
+        Reservation reservation = reservationRepository.findById(reservationDTO.getId(), Reservation.class);
+
+        reservation.setBusinessListingDiscountsId(reservationDTO.getBusinessListingDiscountsId());
+        reservation.setDate(reservationDTO.getDate());
+        reservation.setNoOfDiners(reservationDTO.getNoOfDiners());
+        reservation.setSpecialRequests(reservationDTO.getSpecialRequests());
+        reservation.setCreatedDate(LocalDateTime.now());
+        reservation.setUpdatedDate(LocalDateTime.now());
+        reservation.setCreatedBy(-1);
+
+        try {
+            reservationRepository.save(reservation);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred in updating reservation.");
+        }
+    }
+
 }
