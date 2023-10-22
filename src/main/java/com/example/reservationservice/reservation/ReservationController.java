@@ -1,5 +1,8 @@
 package com.example.reservationservice.reservation;
 
+import java.util.List;
+
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,4 +42,15 @@ public class ReservationController {
     public void editReservation(@RequestBody ReservationDTO reservationDTO) {
         reservationService.editReservation(reservationDTO);
     }
+
+    @GetMapping(value = "/get-upcoming-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Reservation> getUpcomingReservations(Integer userId) {
+        return reservationService.getUpcomingReservations(userId);
+    }
+
+    @GetMapping(value = "/get-historical-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Reservation> getHistoricalReservations(Integer userId) {
+        return reservationService.getHistoricalReservations(userId);
+    }
+
 }

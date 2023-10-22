@@ -1,6 +1,7 @@
 package com.example.reservationservice.reservation;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -65,5 +66,13 @@ public class ReservationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred in updating reservation.");
         }
     }
+
+    public List<Reservation> getUpcomingReservations(Integer userId) {
+        return reservationRepository.getUpcomingReservations(userId);
+    }
+
+    public List<Reservation> getHistoricalReservations(Integer userId) {
+        return reservationRepository.getHistoricalReservations(userId);
+    }   
 
 }
