@@ -9,5 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Repository
 @RequiredArgsConstructor
 public class ReservationRepository extends SimpleJdbcRepositoryImpl {
-    
+    public Integer healthCheck() {
+        return querySingleObject("select id from reservation limit 1", Integer.class);
+    }
 }

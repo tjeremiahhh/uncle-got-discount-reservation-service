@@ -87,6 +87,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>uncle-got-discount-reservation-service</finalName>
 	</build>
 
 </project>

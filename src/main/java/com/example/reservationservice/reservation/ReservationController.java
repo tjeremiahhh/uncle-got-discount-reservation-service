@@ -20,6 +20,11 @@ import lombok.RequiredArgsConstructor;
 public class ReservationController {
     private final ReservationService reservationService;
 
+    @GetMapping("/healthcheck")
+    public Integer healthCheck() {
+        return reservationService.healthCheck();
+    }
+
     @GetMapping("/get-reservation")
     public Reservation getReservation(Integer id) {
         return reservationService.getReservation(id);

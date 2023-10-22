@@ -18,6 +18,10 @@ import lombok.RequiredArgsConstructor;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
 
+    public Integer healthCheck() {
+        return reservationRepository.healthCheck();
+    }
+
     public Reservation getReservation(Integer id) {
         return reservationRepository.findById(id, Reservation.class);
     }
