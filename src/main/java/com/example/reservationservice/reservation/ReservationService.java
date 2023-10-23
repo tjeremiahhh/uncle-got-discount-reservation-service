@@ -56,9 +56,7 @@ public class ReservationService {
         reservation.setDate(reservationDTO.getDate());
         reservation.setNoOfDiners(reservationDTO.getNoOfDiners());
         reservation.setSpecialRequests(reservationDTO.getSpecialRequests());
-        reservation.setCreatedDate(LocalDateTime.now());
         reservation.setUpdatedDate(LocalDateTime.now());
-        reservation.setCreatedBy(-1);
 
         try {
             reservationRepository.save(reservation);
