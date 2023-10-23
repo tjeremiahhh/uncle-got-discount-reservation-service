@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.reservationservice.entity.Reservation;
@@ -51,6 +52,11 @@ public class ReservationController {
     @GetMapping(value = "/get-historical-reservations", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Reservation> getHistoricalReservations(Integer userId) {
         return reservationService.getHistoricalReservations(userId);
+    }
+
+    @PostMapping(value = "/delete-reservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void deleteReservation(@RequestParam Integer id) {
+        reservationService.deleteReservation(id);
     }
 
 }

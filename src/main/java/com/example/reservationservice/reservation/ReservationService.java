@@ -71,6 +71,10 @@ public class ReservationService {
 
     public List<Reservation> getHistoricalReservations(Integer userId) {
         return reservationRepository.getHistoricalReservations(userId);
-    }   
+    }  
+    
+    public void deleteReservation(Integer id) {
+        reservationRepository.deleteById(id, Reservation.class);
+    }
 
 }
